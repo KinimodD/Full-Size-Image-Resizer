@@ -5,10 +5,6 @@ from tkinter import *     # from tkinter import Tk for Python 3.x
 from tkinter import messagebox 
 from tkinter.filedialog import askopenfilename
 
-#global filename
-
-#filename = None
-
 def calculate_dpi(image, width_cm, height_cm):
     """
     Calculate the DPI needed to match the given dimensions in cm.
@@ -87,11 +83,21 @@ def selectFile():
 
 def run():
     global filename, input_image_path
-    input_image_path = filename  # Replace with your input image path
-    resized_image_path = "resized_image.jpg"  # Path for the resized image
-    dpi = int(dpiEntry.get())  # Set DPI for high quality
-    width_in_cm = int(widthInput.get())  # Width in cm for the resized image
-    height_in_cm = int(heightInput.get())  # Height in cm for the resized image
+    try:
+        input_image_path = filename  # Replace with your input image path
+    
+        resized_image_path = "resized_image.jpg"  # Path for the resized image
+        dpi = int(dpiEntry.get())  # Set DPI for high quality
+
+        width_in_cm = int(widthInput.get())  # Width in cm for the resized image
+        height_in_cm = int(heightInput.get())  # Height in cm for the resized image
+
+    except ValueError:
+        messagebox.showerror("Input Error", "Please enter valid numeric values for width and height.")
+        return
+    except NameError:
+        messagebox.showerror("File Error", "Please select an image file first.")
+        return
 
     # Step 1: Resize the image
     resized_image = resize_image(input_image_path, resized_image_path, width_in_cm, height_in_cm, dpi)
@@ -99,7 +105,7 @@ def run():
     # Step 2: Split the resized image into A4-sized pages
     split_into_a4_pages(resized_image, dpi)
 
-    messagebox.showinfo("Done!", "Done!")
+    messagebox.showinfo("Done!", "Images are in the same directory as the script")
 
 
 
